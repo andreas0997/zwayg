@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zwayg — Ein Link, jedes Gerät</title>
+  <meta name="description" content="Erstelle einen einzigen Link, der Nutzer automatisch zum richtigen Store weiterleitet — App Store, Play Store oder Web.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Profile View (shown when URL has profile data) -->
+  <div id="profile-view" class="view" style="display:none;"></div>
+
+  <!-- Redirect View (shown when URL has encoded data) -->
+  <div id="redirect-view" class="view" style="display:none;">
+    <div class="redirect-container">
+      <div class="redirect-logo">
+        <span class="logo-icon">🌿</span>
+        <span class="logo-text">zwayg</span>
+      </div>
+      <div class="redirect-spinner"></div>
+      <p class="redirect-msg">Du wirst weitergeleitet…</p>
+      <p class="redirect-fallback" id="redirect-fallback-msg" style="display:none;">
+        Falls die Weiterleitung nicht klappt, klicke
+        <a id="redirect-fallback-link" href="#">hier</a>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Generator View (default) -->
+  <div id="generator-view" class="view">
+    <!-- Animated Background -->
+    <div class="bg-effects">
+      <div class="bg-orb bg-orb-1"></div>
+      <div class="bg-orb bg-orb-2"></div>
+      <div class="bg-orb bg-orb-3"></div>
+      <div class="bg-grid"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-content">
+        <a href="#" class="nav-logo" id="nav-logo">
+          <span class="logo-icon">🌿</span>
+          <span class="logo-text">zwayg</span>
+        </a>
+        <div class="nav-tagline">Ein Link. Jedes Gerät.</div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="main-content">
+      <section class="hero" id="hero-section">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Kein Backend nötig — alles im Link
+        </div>
+        <h1 class="hero-title">
+          Ein Link.<br>
+          <span class="gradient-text">Jedes Gerät.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Erstelle einen intelligenten Link, der Nutzer automatisch zum richtigen Store 
+          weiterleitet — egal ob iPhone, Android oder Desktop.
+        </p>
+        <button class="cta-button" id="scroll-to-generator">
+          <span>Link erstellen</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3v14m0 0l5-5m-5 5l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- How It Works -->
+      <section class="how-it-works">
+        <div class="steps-grid">
+          <div class="step-card" style="--delay: 0s">
+            <div class="step-number">01</div>
+            <div class="step-icon">🔗</div>
+            <h3>Links einfügen</h3>
+            <p>Füge deine App Store, Play Store und Fallback-Links ein.</p>
+          </div>
+          <div class="step-card" style="--delay: 0.1s">
+            <div class="step-number">02</div>
+            <div class="step-icon">⚡</div>
+            <h3>Link generieren</h3>
+            <p>Erhalte sofort einen einzigen Smart-Link für alle Plattformen.</p>
+          </div>
+          <div class="step-card" style="--delay: 0.2s">
+            <div class="step-number">03</div>
+            <div class="step-icon">🎯</div>
+            <h3>Automatisch weiterleiten</h3>
+            <p>Nutzer werden je nach Gerät zum richtigen Ziel geleitet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Generator Section -->
+      <section class="generator-section" id="generator-section">
+        <div class="generator-card">
+
+          <!-- Mode Tabs -->
+          <div class="mode-tabs">
+            <button class="mode-tab active" id="tab-smartlink" type="button">🔗 Smart Link</button>
+            <button class="mode-tab" id="tab-profile" type="button">✨ Profil-Seite</button>
+          </div>
+
+          <div class="generator-header" id="generator-header">
+            <h2>Smart-Link erstellen</h2>
+            <p>Füge mindestens einen Link ein. Leere Felder werden übersprungen.</p>
+          </div>
+
+          <form id="link-form" autocomplete="off">
+            <!-- Link Name -->
+            <div class="form-group">
+              <label for="link-name">
+                <span class="label-icon">✏️</span>
+                Link-Name <span class="label-hint">(optional, für deine Übersicht)</span>
+              </label>
+              <input type="text" id="link-name" placeholder="z.B. Meine App" maxlength="60">
+            </div>
+
+            <!-- iOS Link -->
+            <div class="form-group">
+              <label for="link-ios">
+                <span class="label-icon">🍎</span>
+                Apple App Store
+              </label>
+              <input type="url" id="link-ios" placeholder="https://apps.apple.com/app/...">
+            </div>
+
+            <!-- Android Link -->
+            <div class="form-group">
+              <label for="link-android">
+                <span class="label-icon">🤖</span>
+                Google Play Store
+              </label>
+              <input type="url" id="link-android" placeholder="https://play.google.com/store/apps/details?id=...">
+            </div>
+
+            <!-- Huawei AppGallery -->
+            <div class="form-group collapsible-group" style="display:none;" id="group-huawei">
+              <label for="link-huawei">
+                <span class="label-icon">📱</span>
+                Huawei AppGallery
+              </label>
+              <input type="url" id="link-huawei" placeholder="https://appgallery.huawei.com/app/...">
+            </div>
+
+            <!-- Windows -->
+            <div class="form-group collapsible-group" style="display:none;" id="group-windows">
+              <label for="link-windows">
+                <span class="label-icon">🪟</span>
+                Microsoft Store / Windows
+              </label>
+              <input type="url" id="link-windows" placeholder="https://apps.microsoft.com/...">
+            </div>
+
+            <!-- Mac -->
+            <div class="form-group collapsible-group" style="display:none;" id="group-mac">
+              <label for="link-mac">
+                <span class="label-icon">💻</span>
+                Mac App Store
+              </label>
+              <input type="url" id="link-mac" placeholder="https://apps.apple.com/app/...">
+            </div>
+
+            <!-- Fallback / Web -->
+            <div class="form-group">
+              <label for="link-fallback">
+                <span class="label-icon">🌐</span>
+                Fallback / Website
+                <span class="label-hint">(wenn kein Gerät erkannt wird)</span>
+              </label>
+              <input type="url" id="link-fallback" placeholder="https://deine-website.de">
+            </div>
+
+            <!-- Add More Platforms -->
+            <button type="button" class="add-platforms-btn" id="add-platforms-btn">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M8 3v10m-5-5h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Weitere Plattformen
+            </button>
+
+            <!-- Generate Button -->
+            <button type="submit" class="generate-btn" id="generate-btn">
+              <span class="btn-text">Link generieren</span>
+              <span class="btn-icon">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path d="M11 2l9 9-9 9M20 11H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </form>
+
+          <!-- Result -->
+          <div class="result-section" id="result-section" style="display:none;">
+            <div class="result-label">Dein Smart-Link:</div>
+            <div class="result-url-box">
+              <input type="text" id="result-url" readonly>
+              <button type="button" class="copy-btn" id="copy-btn" title="Link kopieren">
+                <svg id="copy-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect x="6" y="6" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M14 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <svg id="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:none;">
+                  <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <div class="result-info">
+              <div class="result-info-item">
+                <span class="info-dot info-dot-ios"></span>
+                <span id="info-ios">—</span>
+              </div>
+              <div class="result-info-item">
+                <span class="info-dot info-dot-android"></span>
+                <span id="info-android">—</span>
+              </div>
+              <div class="result-info-item">
+                <span class="info-dot info-dot-fallback"></span>
+                <span id="info-fallback">—</span>
+              </div>
+            </div>
+            <button type="button" class="new-link-btn" id="new-link-btn">
+              ← Neuen Link erstellen
+            </button>
+          </div>
+
+          <!-- Profile Builder -->
+          <div id="profile-builder" style="display:none;">
+
+            <div class="form-group">
+              <label for="profile-name">
+                <span class="label-icon">✏️</span>
+                Dein Name
+              </label>
+              <input type="text" id="profile-name" placeholder="z.B. Max Mustermann" maxlength="60">
+            </div>
+
+            <div class="form-group">
+              <label for="profile-bio">
+                <span class="label-icon">📝</span>
+                Bio <span class="label-hint">(optional)</span>
+              </label>
+              <textarea id="profile-bio" placeholder="Kurze Beschreibung von dir oder deinem Projekt..." rows="2" maxlength="200"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="profile-avatar">
+                <span class="label-icon">🖼️</span>
+                Foto-URL <span class="label-hint">(optional)</span>
+              </label>
+              <input type="url" id="profile-avatar" placeholder="https://example.com/foto.jpg">
+            </div>
+
+            <div class="profile-links-builder">
+              <div class="links-builder-label">
+                <span class="label-icon">🔗</span>
+                <strong>Links</strong>
+              </div>
+              <div id="profile-links-list"></div>
+              <button type="button" class="add-link-btn" id="add-profile-link-btn">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 3v10m-5-5h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Link hinzufügen
+              </button>
+            </div>
+
+            <button type="button" class="generate-btn" id="generate-profile-btn" style="margin-top:28px;">
+              <span class="btn-text">Profil-Seite erstellen</span>
+              <span class="btn-icon">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path d="M11 2l9 9-9 9M20 11H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div id="profile-result-section" class="result-section" style="display:none;">
+              <div class="result-label">Deine Profil-Seite:</div>
+              <div class="result-url-box">
+                <input type="text" id="profile-result-url" readonly>
+                <button type="button" class="copy-btn" id="copy-profile-btn" title="Link kopieren">
+                  <svg id="copy-profile-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <rect x="6" y="6" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M14 6V4a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                  <svg id="check-profile-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:none;">
+                    <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <a id="profile-preview-link" href="#" target="_blank" class="preview-link-btn">Vorschau öffnen ↗</a>
+              <button type="button" class="new-link-btn" id="new-profile-btn">← Neue Profil-Seite</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>zwayg — Dein Link verzweigt sich. 🌿</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
